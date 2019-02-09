@@ -16,12 +16,6 @@ echo "==> Removing linux source"
 dpkg --list | awk '{print $2}' | grep linux-source | xargs apt-get -y purge
 echo "==> Removing documentation"
 dpkg --list | awk '{print $2}' | grep -- '-doc$' | xargs apt-get -y purge
-#echo "==> Removing development packages"
-#dpkg --list | awk '{print $2}' | grep -- '-dev$' | xargs apt-get -y purge
-#echo "==> Removing development tools"
-#dpkg --list | grep -i compiler | awk '{print $2}' | xargs apt-get -y purge
-#apt-get -y purge cpp gcc g++
-#apt-get -y purge build-essential git
 echo "==> Removing X11 libraries"
 apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6 libxau6 libxdmcp6
 echo "==> Removing other oddities"
@@ -44,11 +38,7 @@ if [ -d /var/lib/plymouth ]; then
     rm -rf /var/lib/plymouth
 fi
 
-#echo "==> Removing man pages"
-#rm -rf /usr/share/man/*
 echo "==> Removing APT files"
 find /var/lib/apt -type f | xargs rm -f
-#echo "==> Removing any docs"
-#rm -rf /usr/share/doc/*
 echo "==> Removing caches"
 find /var/cache -type f -exec rm -rf {} \;
