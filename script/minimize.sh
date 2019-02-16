@@ -2,7 +2,7 @@
 
 # Reduce installed languages to just "en_US"
 echo "==> Configuring locales"
-apt-get -y purge language-pack-en language-pack-gnome-en language-selector-common
+apt-get -y purge language-pack-en language-pack-gnome-en
 sed -i -e '/^[^# ]/s/^/# /' /etc/locale.gen
 LANG=en_US.UTF-8
 LC_ALL=$LANG
@@ -19,16 +19,21 @@ dpkg --list | awk '{print $2}' | grep -- '-doc$' | xargs apt-get -y purge
 echo "==> Removing X11 libraries"
 apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6 libxau6 libxdmcp6
 echo "==> Removing other oddities"
-apt-get -y purge popularity-contest installation-report plymouth xdg-user-dirs
-apt-get -y purge nano
+apt-get -y purge accountsservice bind9-host busybox-static command-not-found command-not-found-data \
+    dmidecode dosfstools friendly-recovery geoip-database hdparm info install-info installation-report \
+    iso-codes krb5-locales language-selector-common laptop-detect lshw mlocate mtr-tiny nano \
+    ncurses-term ntfs-3g os-prober parted pciutils plymouth popularity-contest powermgmt-base \
+    python-apt-common sgml-base shared-mime-info ssh-import-id \
+    tasksel tcpdump ufw usbutils uuid-runtime xdg-user-dirs xml-core
+apt-get -y autoremove --purge
 
 # Clean up orphaned packages with deborphan
-apt-get -y install deborphan
+apt-get -y install --no-install-recommends deborphan
 deborphan --find-config | xargs apt-get -y purge
 while [ -n "$(deborphan --guess-all)" ]; do
     deborphan --guess-all | xargs apt-get -y purge
 done
-apt-get -y purge deborphan dialog
+apt-get -y purge deborphan
 
 # Clean up the apt cache
 apt-get -y autoremove --purge

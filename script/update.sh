@@ -14,10 +14,8 @@ apt-get -y update
 if [[ $UPDATE =~ true || $UPDATE =~ 1 || $UPDATE =~ yes ]]; then
     apt-get -y dist-upgrade
 fi
-apt-get -y install build-essential linux-headers-generic
-apt-get -y install ssh nfs-common curl git vim
-apt-get -y autoremove --purge
-apt-get -y clean
+apt-get -y install --no-install-recommends build-essential linux-headers-generic
+apt-get -y install --no-install-recommends ssh nfs-common curl git vim
 
 # Disable release upgrader
 #echo "==> Disabling the release upgrader"
@@ -26,6 +24,10 @@ echo "==> Removing the release upgrader"
 apt-get -y purge ubuntu-release-upgrader-core
 rm -rf /var/lib/ubuntu-release-upgrader
 rm -rf /var/lib/update-manager
+
+# Clean up the apt cache
+apt-get -y autoremove --purge
+apt-get -y clean
 
 # Disable IPv6
 if [[ $DISABLE_IPV6 =~ true || $DISABLE_IPV6 =~ 1 || $DISABLE_IPV6 =~ yes ]]; then
